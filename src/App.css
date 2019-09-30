@@ -49,16 +49,19 @@
   flex-shrink: 0;
   width: 33.3%;
   height: 33.3%;
-  border: solid 1px #fff;
+  border: solid 1px #000;
   box-sizing: border-box;
-  background: #cdcdcd;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.cell.static {
+  background: #cdcdcd;
+}
+
 .area.error {
-  border: solid 2px lightcoral;
+  border: solid 2px red;
 }
 
 .cell.error {

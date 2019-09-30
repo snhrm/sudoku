@@ -16,7 +16,7 @@ export const createInitialField = (): Field => {
       range.push(range.shift() as number);
     }
     _.forEach(range, (num, i) => {
-      field.push({x: line, y: i + 1, area: getArea(line, i + 1), value: num})
+      field.push({x: line, y: i + 1, area: getArea(line, i + 1), isStatic: true, value: num})
     });
   });
 
@@ -119,7 +119,7 @@ export const calcArea = (field: Field): AreaResult[] => {
     });
 
     const duplicate = values.filter((v, i ,self) => {
-      return self.indexOf(v) !== self.lastIndexOf(v);
+      return !v || self.indexOf(v) !== self.lastIndexOf(v);
     });
 
     return {area: area, isInvalid: duplicate.length > 0}
@@ -142,7 +142,7 @@ export const calcX = (field: Field): XResult[] => {
     });
 
     const duplicate = values.filter((v, i ,self) => {
-      return self.indexOf(v) !== self.lastIndexOf(v);
+      return !v || self.indexOf(v) !== self.lastIndexOf(v);
     });
 
     return {x: x, isInvalid: duplicate.length > 0}
@@ -165,7 +165,7 @@ export const calcY = (field: Field): YResult[] => {
     });
 
     const duplicate = values.filter((v, i ,self) => {
-      return self.indexOf(v) !== self.lastIndexOf(v);
+      return !v || self.indexOf(v) !== self.lastIndexOf(v);
     });
 
     return {y: y, isInvalid: duplicate.length > 0}
@@ -202,4 +202,33 @@ export const checkValid = (field: Field): Invalid[] => {
     }
   });
   return invalids
+};
+
+export const createProblem = (min: number, max: number, field?: Field) => {
+  const pickupRange =  _.range(min, max + 1);
+  if (!field) {
+    field = createInitialField();
+  }
+
+  console.log(JSON.stringify(pickupRange));
+  _.range(1, 10).forEach((num) => {
+    let newField = _.filter(field, (cell) => (
+      cell.area !== num
+    ));
+    let targetCells = _.filter(field, (cell) => (
+      cell.area === num
+    ));
+
+    console.log(JSON.stringify(JSON.stringify(targetCells)));
+    for (let i = 0; i <= _.shuffle(pickupRange)[0]; i++) {
+      const targetCell = targetCells[_.random(0, 8)];
+      targetCell.value = undefined;
+      targetCell.isStatic = false;
+    }
+    field = newField.concat(targetCells);
+    console.log(JSON.stringify(JSON.stringify(targetCells)));
+    console.log(JSON.stringify(JSON.stringify(field)));
+  });
+
+  return field;
 };

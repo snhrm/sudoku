@@ -13,7 +13,8 @@ export const Cell: React.FC<Props> = ({cell}) => {
   return (
     <div
       className={
-        `cell ${_.find(invalids, (invalid) => (
+        `cell ${cell.isStatic ? 'static' : ''}
+        ${!cell.isStatic && _.find(invalids, (invalid) => (
           invalid.x === cell.x || invalid.y === cell.y
         )) ? 'error' : ''}`
       }
@@ -21,18 +22,20 @@ export const Cell: React.FC<Props> = ({cell}) => {
       data-y={cell.y}
       data-area={cell.area}
     >
-      <div className="selectWrap">
-        <select
-          className="select"
-          value={cell.value}
-          onChange={(e) => handleChange(cell.x, cell.y, e.target.value ? parseInt(e.target.value, 10) : undefined)}
-        >
-          <option value="">-</option>
-          {_.range(1, 10).map((num, i) => (
-            <option key={i} value={num}>{num}</option>
-          ))}
-        </select>
-      </div>
+      {cell.isStatic ? cell.value : (
+        <div className="selectWrap">
+          <select
+            className="select"
+            value={cell.value}
+            onChange={(e) => handleChange(cell.x, cell.y, e.target.value ? parseInt(e.target.value, 10) : undefined)}
+          >
+            <option value="">-</option>
+            {_.range(1, 10).map((num, i) => (
+              <option key={i} value={num}>{num}</option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   )
 };

@@ -3,7 +3,8 @@ export type Cell = {
   y: number;
   area: number;
   value?: number;
-  [key: string]: number | undefined;
+  isStatic: boolean;
+  [key: string]: any;
 };
 
 export type Field = Cell[];

@@ -2,19 +2,21 @@ import React from 'react';
 import * as _ from 'lodash';
 import './App.css';
 import {Field} from "./lib/ModelInterface";
-import {calcArea, calcX, calcY, checkValid, createInitialField, Invalid} from "./lib/util";
+import {calcArea, calcX, calcY, checkValid, createInitialField, createProblem, Invalid} from "./lib/util";
 import {Area} from "./components/Area";
 import {AppContext} from "./AppContext";
 
 type Props = {};
 type State = {
-  field: Field
-  invalids: Invalid[]
+  field: Field;
+  problem: Field;
+  invalids: Invalid[];
 }
 
 class App extends React.Component<Props, State> {
   state: State = {
-    field: createInitialField(),
+    field: [],
+    problem: [],
     invalids: [],
   };
 
@@ -22,10 +24,17 @@ class App extends React.Component<Props, State> {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleCheckValid = this.handleCheckValid.bind(this);
+    this.handleInitValid = this.handleInitValid.bind(this);
   }
 
   componentDidMount(): void {
     this.handleCheckValid();
+    const field = createInitialField();
+    this.setState({
+      field,
+      problem: createProblem(1, 2, field),
+    })
   }
 
   handleChange(x: number, y: number, value?: number) {
@@ -39,7 +48,6 @@ class App extends React.Component<Props, State> {
 
     this.setState({
       field: newField,
-      invalids: checkValid(newField)
     })
   }
 
@@ -49,13 +57,20 @@ class App extends React.Component<Props, State> {
     })
   }
 
+  handleInitValid() {
+    this.setState({
+      invalids: []
+    })
+  }
+
   render() {
-    const {field, invalids} = this.state;
+    const {field, problem, invalids} = this.state;
 
     return (
       <AppContext.Provider
         value={{
           field,
+          problem,
           invalids,
           handleChange: this.handleChange
         }}
@@ -63,7 +78,7 @@ class App extends React.Component<Props, State> {
         <div className="container">
           <div className="sudoku">
             {_.range(1, 10).map((num, i) => {
-              const cells = _.filter(field, ((cell) => {
+              const cells = _.filter(problem, ((cell) => {
                 return cell.area === num;
               }));
 
@@ -76,6 +91,8 @@ class App extends React.Component<Props, State> {
               )
             })}
           </div>
+          <button onClick={this.handleCheckValid}>check</button>
+          <button onClick={this.handleInitValid}>init</button>
         </div>
         <hr/>
         <code>
