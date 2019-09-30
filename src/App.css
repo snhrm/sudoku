@@ -1,33 +1,92 @@
-.App {
-  text-align: center;
+.container {
+  position: relative;
+  width: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.sudoku {
   display: flex;
-  flex-direction: column;
+  margin: 0 auto;
+  width: 900px;
+  height: 900px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  color: #fff;
+}
+
+@media screen and (max-width: 992px){
+  .container:before {
+    content:"";
+    display: block;
+    padding-top: 100%; /* 高さを幅の100%に固定 */
+  }
+
+  .sudoku {
+    width: 100%;
+    height: initial;
+    margin: initial;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.area {
+  width: 33.3%;
+  height: 33.3%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: solid 1px #fff;
+  box-sizing: border-box;
+}
+
+.cell {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 33.3%;
+  height: 33.3%;
+  border: solid 1px #fff;
+  box-sizing: border-box;
+  background: #cdcdcd;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.area.error {
+  border: solid 2px lightcoral;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cell.error {
+  background: lightcoral;
 }
+
+.select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 20px;
+  width: 2rem;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.selectWrap::after {
+   content: '▼';
+   position: absolute;
+   left: 1rem;
+   top: 50%;
+   transform: translateY(-50%);
+   font-size: 20px;
+   color: #666;
+   pointer-events: none;
+ }
