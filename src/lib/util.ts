@@ -23,7 +23,9 @@ export const createInitialField = (): Field => {
   return shuffleField(field);
 };
 
-const ZoneMapping: number[][] = [
+type Zone = number[];
+
+const ZoneMapping:Zone[] = [
   [1,2,3],
   [4,5,6],
   [7,8,9]
@@ -32,37 +34,39 @@ const ZoneMapping: number[][] = [
 const shuffleField = (originalField: Field): Field => {
   let field: Field = originalField.slice();
 
-  //const shuffleCount = _.random(1, 9);
+  const shuffleCount = _.random(1, 9);
 
-  for(var i = 1; i <= 1; i++) {
-    let targetZone = _.sample(ZoneMapping) as number[];
+  for(var i = 1; i <= shuffleCount; ++i) {
+    let targetZone = _.sample(ZoneMapping) as Zone;
 
-    console.log(JSON.stringify(targetZone));
-    field = shuffle(field, targetZone);
+    field = shuffle(field, targetZone, 'x');
+    field = shuffle(field, targetZone, 'y');
   }
 
   return field;
 };
 
-const removeZoneFromField = (field: Field, zone: number[]) => {
+const removeZoneFromField = (field: Field, zone: Zone, key: Axis) => {
   return _.filter(field, (cell) => (
-    !zone.includes(cell.x)
+    !zone.includes(cell[key])
   ));
 };
 
-const shuffle = (originalField: Field, zone: number[]) => {
-  let newField = removeZoneFromField(originalField, zone);
+type Axis = 'x' | 'y';
+
+const shuffle = (originalField: Field, zone: Zone, key: Axis) => {
+  let newField = removeZoneFromField(originalField, zone, key);
   let shuffledZone = _.shuffle(zone.slice());
 
   _.forEach(zone, (axis, i) => {
     const cloneField = _.cloneDeep(originalField);
 
     const targetAxis = _.filter(cloneField, (cell) => {
-      return cell.x === axis;
+      return cell[key] === axis;
     });
 
     const changedAxis = targetAxis.map((cell) => {
-      cell.x = shuffledZone[i] as number;
+      cell[key] = shuffledZone[i] as number;
 
       return cell;
     });
