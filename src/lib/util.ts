@@ -159,7 +159,7 @@ export const calcY = (field: Field): YResult[] => {
     const values: number[] = [];
 
     _.forEach(field, (cell) => {
-      if (cell.x === y) {
+      if (cell.y === y) {
         values.push(cell.value || 0)
       }
     });

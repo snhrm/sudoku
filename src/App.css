@@ -1,34 +1,17 @@
-.container {
-  position: relative;
-  width: 100%;
-}
-
 .sudoku {
   display: flex;
-  margin: 0 auto;
-  width: 900px;
-  height: 900px;
+  margin: 0 auto 2rem;
+  width: 80vh;
+  height: 80vh;
   flex-direction: row;
   flex-wrap: wrap;
   color: #fff;
 }
 
 @media screen and (max-width: 992px){
-  .container:before {
-    content:"";
-    display: block;
-    padding-top: 100%; /* 高さを幅の100%に固定 */
-  }
-
   .sudoku {
-    width: 100%;
-    height: initial;
-    margin: initial;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    width: 100vw;
+    height: 100vw;
   }
 }
 

@@ -1,8 +1,7 @@
 import React from 'react';
 import * as _ from 'lodash';
-import './App.css';
 import {Field} from "./lib/ModelInterface";
-import {calcArea, calcX, calcY, checkValid, createInitialField, createProblem, Invalid} from "./lib/util";
+import {checkValid, createInitialField, createProblem, Invalid} from "./lib/util";
 import {Area} from "./components/Area";
 import {AppContext} from "./AppContext";
 
@@ -29,7 +28,6 @@ class App extends React.Component<Props, State> {
   }
 
   componentDidMount(): void {
-    this.handleCheckValid();
     const field = createInitialField();
     this.setState({
       field,
@@ -52,9 +50,14 @@ class App extends React.Component<Props, State> {
   }
 
   handleCheckValid() {
+    const invalids = checkValid(this.state.field);
     this.setState({
-      invalids: checkValid(this.state.field)
-    })
+      invalids
+    });
+
+    if (invalids.length === 0) {
+      alert('Complete!!');
+    }
   }
 
   handleInitValid() {
@@ -76,6 +79,7 @@ class App extends React.Component<Props, State> {
         }}
       >
         <div className="container">
+          <h1 className="title">Sudoku</h1>
           <div className="sudoku">
             {_.range(1, 10).map((num, i) => {
               const cells = _.filter(problem, ((cell) => {
@@ -91,9 +95,12 @@ class App extends React.Component<Props, State> {
               )
             })}
           </div>
-          <button onClick={this.handleCheckValid}>check</button>
-          <button onClick={this.handleInitValid}>init</button>
+          <div className="buttons are-medium is-centered">
+            <button className="button is-success" onClick={this.handleCheckValid}>check</button>
+            <button className="button " onClick={this.handleInitValid}>init</button>
+          </div>
         </div>
+        {/*
         <hr/>
         <code>
           {JSON.stringify(this.state.field)}
@@ -114,6 +121,7 @@ class App extends React.Component<Props, State> {
         <code>
           {JSON.stringify(checkValid(this.state.field))}
         </code>
+        */}
       </AppContext.Provider>
     );
   }
